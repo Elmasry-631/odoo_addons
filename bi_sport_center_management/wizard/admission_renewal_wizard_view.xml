@@ -1,0 +1,55 @@
+<odoo>
+    <data>
+        <record id="admission_renewal_wizard_form" model="ir.ui.view">
+            <field name="name">Admission Renewal Wizard</field>
+            <field name="model">admission.renewal.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="admission_id" invisible="1"/>
+                        <field name="student_id" readonly="1"/>
+                        <field name="trainer_id" readonly="1"/>
+                        <field name="n_of_reservations"/>
+                        <field name="weekday_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+
+                        <label for="start_duration" string="Duration"/>
+                        <div class="w-100">
+                            <div class="o_row">
+                                <field name="start_duration" widget="daterange" required="1" readonly="0"
+                                       options="{'related_end_date': 'end_duration'}"
+                                />
+                                <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon"
+                                   title="Arrow"/>
+                                <field name="end_duration" widget="daterange" required="1"
+                                       options="{'related_start_date': 'start_duration'}"
+                                />
+                            </div>
+                        </div>
+                        <label for="start_date" string="Sessions Time"/>
+                        <div class="w-100">
+                            <div class="o_row">
+                                <field name="start_date" required="1"/>
+                                <i class="fa fa-long-arrow-right mx-2 oe_edit_only"
+                                   aria-label="Arrow icon"
+                                   title="Arrow"/>
+                                <field name="end_date" required="1"/>
+                            </div>
+                        </div>
+                        <field name="duration"/>
+                        <field name="is_vip"
+                               widget="boolean_toggle"/>
+
+
+                    </group>
+
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

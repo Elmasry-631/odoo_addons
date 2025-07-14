@@ -1,0 +1,51 @@
+<odoo>
+    <template id="custom_invoice_report_sport" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@class='text-muted mb-3']" position="after">
+            <div class="additional-info">
+                <span>Additional Admission Information:</span>
+                <div>
+                    <span>Number of reservations:</span>
+                    <span>
+                        <t t-esc="o.admission_n_of_reservations"/>
+                    </span>
+                </div>
+                <div>
+                    <span>Days:</span>
+                    <span>
+                        <t t-set="count" t-value="len(o.admission_weekday_ids)"/>
+                        <t t-set="index" t-value="0"/>
+                        <t t-foreach="o.admission_weekday_ids" t-as="day">
+                            <t t-esc="day.name"/>
+                            <t t-if="index + 1 != count">,</t>  <!-- Manually check last item -->
+                            <t t-set="index" t-value="index + 1"/>
+                        </t>
+                    </span>
+                </div>
+                <div>
+                    <span class="me-1">Reservations Time:</span>
+                    <span class="me-1">
+                        <t t-esc="o.admission_start_date"/>
+                    </span>
+                    <span class="me-1">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                    <span>
+                        <t t-esc="o.admission_end_date"/>
+                    </span>
+                </div>
+                <div>
+                    <span class="me-1">Date:</span>
+                    <span class="me-1">
+                        <t t-esc="o.admission_start_duration"/>
+                    </span>
+                    <span class="me-1">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                    <span>
+                        <t t-esc="o.admission_end_duration"/>
+                    </span>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

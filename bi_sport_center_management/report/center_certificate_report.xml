@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_certificate">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <div style="margin-top: 35px;padding:0;color:black;display: table;font-family:Georgia, serif;font-size: 33.6px;text-align: center;">
+                        <div style="width: 1200px;height: 600px;display: table-cell;vertical-align: center;">
+                            <div style="color: rgb(118, 46, 35);font-size: 70px;">
+                                <img t-if="o.env.user.company_id.logo"
+                                     t-att-src="image_data_uri(o.env.user.company_id.logo)" style="max-height: 63px;"
+                                     alt="Logo"/>
+                                <br/>
+                                <span t-field="o.env.user.company_id.name"/>
+                            </div>
+                            <div style="color: rgb(153, 127, 93);font-size: 49px;margin: 14px;">
+                                Certificate
+                            </div>
+                            <div style="margin: 28px;font-family:Apple Chancery, cursive;">
+                                Presented to
+                            </div>
+                            <div style="border-bottom: 2px solid black;font-size: 28px;font-style: italic;margin: 28px auto;width: 532px;">
+                                <span t-field="o.user_name"/>
+                            </div>
+                            <div style="margin: 28px;font-family:Apple Chancery, cursive;">
+                                For
+                                <span t-field="o.title"/>
+                            </div>
+                            <div style="margin: 28px;font-family:Apple Chancery, cursive;">
+                                <span t-field="o.content"/>
+                            </div>
+                            <div style="font-size: 22.4px;font-style: italic;margin: 28px auto;width: 210px;">
+                                Certificate
+                                <span t-field="o.name"/>
+                            </div>
+                            <div style="border-bottom: 2px solid black;font-size: 30.8px;font-style: italic;margin: 28px auto;width: 210px;">
+                                <span t-field="o.date"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="custom_paperformat" model="report.paperformat">
+        <field name="name">Custom Paper Format</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+    </record>
+
+
+    <record id="action_report_center_certificate" model="ir.actions.report">
+        <field name="name">Certificate</field>
+        <field name="model">center.certificate</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bi_sport_center_management.report_certificate</field>
+        <field name="report_file">bi_sport_center_management.report_certificate</field>
+        <field name="print_report_name">('Certificate - %s' % (object.name))</field>
+        <field name="binding_model_id" ref="model_center_certificate"/>
+        <field name="paperformat_id" ref="bi_sport_center_management.custom_paperformat"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
