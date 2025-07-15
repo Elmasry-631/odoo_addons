@@ -1,0 +1,106 @@
+<odoo>
+    <!-- 🧩 Inherit CRM Lead Form: Add Project Creation Button + Project Field -->
+    <record id="crm_lead_view_form_inherit_project" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.project</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <!-- زر إنشاء مشروع -->
+            <xpath expr="//header" position="inside">
+                <button name="action_create_project"
+                        type="object"
+                        string="Create Project"
+                        class="btn-primary"
+                        invisible="project_id"/>
+            </xpath>
+
+            <!-- عرض المشروع داخل الفورم -->
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="project_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 📌 Inherit CRM Lead Form: Add View Project Button in Button Box -->
+    <record id="crm_lead_view_form_inherit_project_button" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.project.button</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_project"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-folder-open"
+                        invisible="not project_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">View Project</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 🧩 Inherit Project Form: Add Button to View Opportunity & Create Quotation -->
+    <record id="project_project_view_form_inherit_crm" model="ir.ui.view">
+        <field name="name">project.project.view.inherit.crm</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+
+            <!-- زر عرض الـ CRM -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_crm_lead"
+                        type="object"
+                        string="View Opportunity"
+                        class="btn-secondary"
+                        invisible="not crm_lead_id"/>
+            </xpath>
+
+            <!-- زر إنشاء عرض سعر -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_create_quotation_from_project"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o"
+                        invisible="not partner_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Create Quotation</span>
+                    </div>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+      <!-- 🌟 Smart Button في الـ Button Box -->
+<record id="view_project_form_inherit_sale_orders" model="ir.ui.view">
+    <field name="name">project.project.form.inherit.sale.order</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.edit_project"/>
+    <field name="arch" type="xml">
+        <xpath expr="//div[@name='button_box']" position="inside">
+            <button name="%(sale.action_orders)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-file-text-o"
+                    context="{'search_default_project_id': id}">
+                <div class="o_stat_info">
+                    <field name="sale_order_ids" widget="statinfo" string="Quotations"/>
+                </div>
+            </button>
+        </xpath>
+    </field>
+</record>
+
+
+    <!-- 📄 Action لفتح قائمة عروض السعر لهذا المشروع -->
+    <record id="action_project_quotation_list" model="ir.actions.act_window">
+        <field name="name">Project Quotations</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('project_id', '=', active_id)]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>
