@@ -1,0 +1,40 @@
+
+<odoo>
+    <record id="view_student_reservation_form_inherit" model="ir.ui.view">
+        <field name="name">student.reservation.form.inherit</field>
+        <field name="model">student.reservation</field>
+        <field name="inherit_id" ref="bi_massage_center_management.student_reservation_view_form_no_create"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_add_session_wizard"
+                        string="Add Extra Session"
+                        type="object"
+                        class="btn-primary"/>
+            </header>
+        </field>
+    </record>
+
+    <record id="view_add_session_wizard" model="ir.ui.view">
+        <field name="name">add.session.wizard.form</field>
+        <field name="model">add.session.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Extra Session">
+                <group>
+                    <field name="new_start"/>
+                    <field name="new_end"/>
+                </group>
+                <footer>
+                    <button name="action_add_session" string="Create" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_session_wizard" model="ir.actions.act_window">
+        <field name="name">Add Extra Session</field>
+        <field name="res_model">add.session.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
