@@ -5,10 +5,10 @@
     'version': "18.0.0.0",
     'summary': "Manage Health Care Center Management Operations  Industry  Management Services Custom Health Care Solution ",
     'description': """Manage Health Care Center Management Operations  Industry  Management Services Custom Health Care Solution.""",
-    "author": "BrowseInfo",
+    "author": "Ibrahim Elmasry",
 
-    "price": 99,
-    "currency": 'EUR',
+
+    
     'depends': ['base', 'mail', 'account', 'product', 'website', 'contacts', 'event', 'website_event_sale', 'stock',
                 'purchase',],
     'data': [

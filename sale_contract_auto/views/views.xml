@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+  <!-- ============================ -->
+  <!--      Views: Tree & Form     -->
+  <!-- ============================ -->
+
+  <!-- Contract List View -->
+  <record id="view_sale_contract_list" model="ir.ui.view">
+    <field name="name">sale.contract.list</field>
+    <field name="model">sale.contract</field>
+    <field name="arch" type="xml">
+      <list string="Contracts">
+        <field name="name"/>
+        <field name="partner_id"/>
+        <field name="sale_order_id"/>
+        <field name="contract_date"/>
+        <field name="amount_total"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Contract Form View -->
+  <record id="view_sale_contract_form" model="ir.ui.view">
+    <field name="name">sale.contract.form</field>
+    <field name="model">sale.contract</field>
+    <field name="arch" type="xml">
+      <form string="Contract">
+        <header>
+          <field name="state" widget="statusbar" statusbar_visible="draft,active,finished"
+                 statusbar_colors="{'draft':'blue','active':'green','closed':'orange','cancelled':'red'}"/>
+          <button name="action_set_active" string="Activate" type="object" state="draft"
+                  class="btn-primary" invisible="state != 'draft'"/>
+          <button name="action_finish" string="Finished" type="object" state="active"
+                  class="btn-secondary" invisible="state != 'active'"/>
+          <button name="action_cancel" string="Cancel" type="object" state="draft,active"
+                  class="btn-danger" invisible="state == 'finished'"/>
+<!--          <button name="action_send_contract_link"-->
+<!--                  type="object"-->
+<!--                  string="Send for Signature"-->
+<!--                  class="btn-primary"-->
+<!--                  icon="fa-envelope"-->
+<!--                  invisible="state != 'draft'"/>-->
+
+        </header>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="partner_id" readonly="1"/>
+            <field name="sale_order_id" readonly="1"/>
+            <field name="contract_date"/>
+            <field name="amount_total"/>
+            <field name="currency_id" readonly="1"/>
+          </group>
+          <notebook>
+            <page string="Agreement Terms">
+              <field name="agreement_terms"/>
+            </page>
+            <page string="Contract Lines">
+              <field name="contract_line_ids">
+                <list editable="bottom">
+                  <field name="product_id"/>
+                  <field name="name"/>
+                  <field name="quantity"/>
+                  <field name="price_unit"/>
+                  <field name="price_subtotal"/>
+                </list>
+              </field>
+              <group>
+                <field name="subtotal_total" readonly="1" widget="monetary"/>
+              </group>
+            </page>
+            <page string="Parties">
+              <group>
+                <field name="first_party_name"/>
+                <field name="first_party_signature" widget="signature"/>
+                <field name="second_party_name"/>
+                <field name="second_party_signature" widget="signature"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <!-- Contract Template Tree -->
+  <record id="view_contract_template_tree" model="ir.ui.view">
+    <field name="name">contract.template.tree</field>
+    <field name="model">contract.template</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Contract Template Form -->
+  <record id="view_contract_template_form" model="ir.ui.view">
+    <field name="name">contract.template.form</field>
+    <field name="model">contract.template</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="content"/>
+          </group>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <!-- Sale Order: Contract Button in Button Box -->
+  <record id="view_order_form_inherit_contract_button" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.contract.button</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet/div[@class='oe_button_box']" position="inside">
+        <button name="action_view_contract"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-file-o">
+          <field name="contract_id" invisible="1"/>
+          <div class="o_stat_info">
+            <span>Contract</span>
+          </div>
+        </button>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Sale Order: Contract Template Dropdown -->
+  <record id="view_order_form_inherit_contract_template" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.contract.template</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet/group" position="before">
+        <group string="Contract">
+          <field name="contract_template_id"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- ============================ -->
+  <!--           Actions           -->
+  <!-- ============================ -->
+
+  <record id="action_sale_contracts" model="ir.actions.act_window">
+    <field name="name">Sale Contracts</field>
+    <field name="res_model">sale.contract</field>
+    <field name="view_mode">list,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create your first contract
+      </p>
+    </field>
+  </record>
+
+  <record id="action_contract_templates" model="ir.actions.act_window">
+    <field name="name">Contract Templates</field>
+    <field name="res_model">contract.template</field>
+    <field name="view_mode">list,form</field>
+    <field name="help" type="html">
+      <p>You can manage your contract terms templates here.</p>
+    </field>
+  </record>
+
+  <!-- ============================ -->
+  <!--         Menu Items          -->
+  <!-- ============================ -->
+
+  <menuitem id="menu_sale_contract_root" name="Contracts" parent="sale.sale_order_menu" sequence="100"/>
+  <menuitem id="menu_sale_contracts" name="All Contracts" parent="menu_sale_contract_root" action="action_sale_contracts"/>
+  <menuitem id="menu_contract_templates" name="Contract Templates" parent="menu_sale_contract_root" action="action_contract_templates" sequence="10"/>
+
+</data>
+</odoo>

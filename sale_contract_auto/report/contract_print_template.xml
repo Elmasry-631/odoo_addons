@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="contract_custom_print_template">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="doc">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2 class="text-center" style="margin-bottom: 30px;">Sales Contract</h2>
+
+            <div class="mb-2">
+              <strong>Contract Reference:</strong> <span t-esc="doc.name"/>
+            </div>
+            <div class="mb-4">
+              <strong>Contract Date:</strong> <span t-esc="doc.contract_date"/>
+            </div>
+
+            <div class="mb-3">
+              <strong>First Party:</strong> <span t-esc="doc.first_party_name"/>
+            </div>
+
+            <div class="mb-3">
+              <strong>Second Party:</strong> <span t-esc="doc.second_party_name"/>
+            </div>
+
+            <div class="mb-4">
+              <strong>Contract Terms:</strong>
+              <div t-raw="doc.agreement_terms" class="ml-3"/>
+            </div>
+
+            <div class="mb-4">
+              <strong>Contract Items:</strong>
+              <table class="table table-sm table-bordered" style="width: 100%; margin-top: 10px;">
+                <thead style="background-color: #f0f0f0;">
+                  <tr>
+                    <th style="padding: 6px;">Product</th>
+                    <th style="padding: 6px;">Description</th>
+                    <th style="padding: 6px; text-align: right;">Quantity</th>
+                    <th style="padding: 6px; text-align: right;">Unit Price</th>
+                    <th style="padding: 6px; text-align: right;">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="doc.contract_line_ids" t-as="line">
+                    <td style="padding: 6px;" t-esc="line.product_id.name"/>
+                    <td style="padding: 6px;" t-esc="line.name"/>
+                    <td style="padding: 6px; text-align: right;" t-esc="line.quantity"/>
+                    <td style="padding: 6px; text-align: right;" t-esc="line.price_unit"/>
+                    <td style="padding: 6px; text-align: right;" t-esc="line.price_subtotal"/>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-right" style="margin-top: 10px;">
+                <strong>Total Amount:</strong>
+                <span t-esc="doc.amount_total"/> <span t-esc="doc.currency_id.symbol"/>
+              </div>
+            </div>
+
+            <div class="mt-5">
+              <strong>Signatures:</strong>
+              <div class="row mt-3">
+                <div class="col-6">
+                  <p><strong>First Party Signature:</strong></p>
+                  <img t-if="doc.first_party_signature"
+                       t-att-src="'data:image/png;base64,%s' % doc.first_party_signature.decode('utf-8')"
+                       style="max-height: 80px; border: 1px solid #ccc; padding: 5px;"/>
+                  <div t-if="not doc.first_party_signature" style="height: 80px; border: 1px dashed #ccc;"></div>
+                </div>
+                <div class="col-6">
+                  <p><strong>Second Party Signature:</strong></p>
+                  <img t-if="doc.second_party_signature"
+                       t-att-src="'data:image/png;base64,%s' % doc.second_party_signature.decode('utf-8')"
+                       style="max-height: 80px; border: 1px solid #ccc; padding: 5px;"/>
+                  <div t-if="not doc.second_party_signature" style="height: 80px; border: 1px dashed #ccc;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>
